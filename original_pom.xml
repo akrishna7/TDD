@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>tdd</groupId>
+	<artifactId>fizzbuzz</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>fizzBuzz</name>
+	<!-- clean test install surefire-report:report jacoco:prepare-agent jacoco:report  -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sureFireVersion>2.2.2</sureFireVersion>
+		<spring.version>5.0.8.RELEASE</spring.version>
+		<springboot.version>2.0.4.RELEASE</springboot.version>
+		<asset.loc>assets</asset.loc>
+		<!-- Sonar -->
+		<project.basedir>${project.basedir}</project.basedir>
+		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+		<sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
+		<sonar.language>java</sonar.language>
+		<sonar.sources>src/main</sonar.sources>
+		<sonar.tests>src/test/java</sonar.tests>
+		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+		<!-- Example inclusion classes - - > <sonar.coverage.inclusions> com/ctl/clientresults/controller/*, 
+			com/ctl/clientresults/service/* </sonar.coverage.inclusions> -->
+	</properties>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.5</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<redirectTestOutputToFile>true</redirectTestOutputToFile>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.6.201602180812</version>
+				<configuration>
+					<destFile>${project.basedir}/target/jacoco.exec</destFile>
+					<dataFile>${project.basedir}/target/jacoco.exec</dataFile>
+					<append>true</append>
+					<rules>
+						<rule>
+							<element>PACKAGE</element>
+						</rule>
+					</rules>
+					<!-- <includes> < ! - - Example inclusion classes (can you either inclusions 
+						or exclusions) We can use either packages/particluar classes - - > 
+						<include>com/ctl/clientresults/controller/*</include> 
+						<include>com/ctl/clientresults/service/*</include> </includes> 
+						< ! - - Example 
+						for Exclusions 
+						<excludes> 
+						    <exclude>com/ctl/clientresults/controller/*</exclude> 
+						</excludes> -->
+				</configuration>
+				<executions>
+					<execution>
+						<id>jacoco-initialize</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
