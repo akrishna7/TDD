@@ -1,0 +1,175 @@
+
+pipeline {
+
+	agent { label 'Docker-enabled' }
+
+	stages {
+
+		stage('Static Code\nAnalysis') {
+			parallel {
+				stage('Linting') {
+					steps {
+						script { sh ('echo "Triggering Linting"') }
+					}
+				}
+
+				stage('DevSecOps'){
+					steps {
+						script { sh ('echo "Triggering DevSecOps"') }
+					}
+				}
+			} // parallel
+		} // stage 'StatCodAnalysis'
+
+		stage('Build\nCode') {
+			steps {
+				script { sh ('echo "Triggering Docker Build"') }
+			}
+		}
+
+		stage('Build\nDocker Image') {
+			steps {
+				script { sh ('echo "Triggering Create Images"') }
+			}
+		}
+
+		stage('Unit\nTests') {
+			steps {
+				script { sh ('echo "Triggering Tests"') }
+			}
+		}
+		stage('Code\nCoverage'){
+			steps {
+				script { sh ('echo "Triggering Code Coverage"') }
+			}
+		}
+		stage('Code\nQuality'){
+			steps {
+				script { sh ('echo "Triggering SonarQube"') }
+			}
+		}
+
+		stage ('QGate-1') {
+			steps {
+				script { sh ('echo "Q-Gate-1 -- DeployToSysTest"') }
+                    println ('Placeholder for QGate-1')
+			}
+		}
+
+		stage ('Deploy to\nIntegration') {
+			steps {
+				script { sh ('echo "DeployToIntTest"') }
+			}
+		}
+
+		stage ('QA Sanity\nTests') {
+			steps {
+				script {
+					sh ('echo "Triggering Sanity Tests"')
+				}
+			}
+		}
+
+			stage('QGate-2'){
+				steps {
+                    println ('Placeholder for QGate-2')
+				}
+			}
+
+		stage ('QA System\nTests') {
+			parallel {
+				stage ('Funtional\nTests') {
+					steps {
+						script {
+
+							sh ('echo "Triggering Regression Tests"')
+						}
+					}
+				} // FuntionalTests
+				
+				stage ('Regression\nTests') {
+					steps {
+						script {
+
+							sh ('echo "Triggering Regression Tests"')
+						}
+					}
+				} // RegressionTests
+			} // SystemTests
+		}
+		
+		stage ('QA-Integration\nTests') {
+			steps {
+				script { sh ('echo "QA-IntegrationTest"') }
+			}
+		} // stage 'QA-IntegrationTest'
+
+		stage('QGate-3'){
+			steps {
+				script { sh ('echo "Quality Gate -- WaitForE2EApproval"') }
+			}
+		}
+
+		stage ('Solution\nTests') {
+			parallel {
+				stage ('E2E Tests') {
+					steps {
+						script {
+							sh ('echo "Triggering (Solution) E2E Testing"')
+							}
+					}
+				}
+				stage ('L&P Tests') {
+					steps {
+						script {
+							sh ('echo "Triggering L&P Testing"')
+						}
+					}
+				} // 'L&PTests'
+			} // parallel
+		} //stage 'SolutionTests'
+
+		stage('QGate-4'){
+			steps {
+				script { sh ('echo "Quality Gate -- WaitForE2EApproval"') }
+			}
+		}
+
+		stage ('UAT') {
+			steps {
+				script {
+					sh ('echo "Triggering UAT"')
+				}
+			}
+		}
+
+		stage('QGate-5'){
+			steps {
+				script { sh ('echo "Quality Gate -- WaitForProdApproval"') }
+                println ('Placeholder for QGate-5')
+			}
+		}
+
+		stage ('Deploy to\nProduction') {
+			steps {
+				script { sh ('echo "DeployToProd"') }
+			}
+		}
+
+		stage ('Production\nSanity Tests') {
+			steps {
+				script {
+					sh ('echo "Triggering Sanity Tests"')
+				}
+			}
+		}
+
+		stage ('Adoption\nStatistics') {
+			steps {
+				script { sh ('echo "Triggering Adoption Stats"')
+			}
+		}
+	}
+
+  }
+}
